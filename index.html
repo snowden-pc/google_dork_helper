@@ -134,6 +134,17 @@
             const target = document.querySelector('#targetInput').value;
             const dorkUrl = 'https://raw.githubusercontent.com/0xlipon/Dorks/main/google_dorks.txt';
 
+            const sitePatterns = [
+                `site:*.${target}`,
+                `site:*.*.*.${target}`,
+                `site:*<*.${target}.*`,
+                `site:*<-*.${target}.*`,
+                `site:*>*.${target}.*`,
+                `site:*->*.${target}.*`,
+                `site:*<->*.${target}.*`,
+                `site:*<*.${target}.com`
+            ];
+
             fetch(dorkUrl)
                 .then(response => {
                     if (!response.ok) {
@@ -149,18 +160,20 @@
                     lines.forEach(line => {
                         const trimmedLine = line.trim();
                         if (trimmedLine) {
-                            const query = `site:*.${target} ${encodeURIComponent(trimmedLine)}`;
-                            const dorkQueryUrl = `${baseUrl}${query}`;
-                            dorkQueries.push(dorkQueryUrl);
+                            sitePatterns.forEach(pattern => {
+                                const query = `${pattern} ${encodeURIComponent(trimmedLine)}`;
+                                const dorkQueryUrl = `${baseUrl}${query}`;
+                                dorkQueries.push(dorkQueryUrl);
 
-                            const listItem = document.createElement('p');
-                            const link = document.createElement('a');
-                            link.href = dorkQueryUrl;
-                            link.target = '_blank';
-                            link.innerText = dorkQueryUrl;
-                            link.style.color = '#00ff00'; // Set link color to green
-                            listItem.appendChild(link);
-                            dorkContainer.appendChild(listItem);
+                                const listItem = document.createElement('p');
+                                const link = document.createElement('a');
+                                link.href = dorkQueryUrl;
+                                link.target = '_blank';
+                                link.innerText = dorkQueryUrl;
+                                link.style.color = '#00ff00'; // Set link color to green
+                                listItem.appendChild(link);
+                                dorkContainer.appendChild(listItem);
+                            });
                         }
                     });
                     currentIndex = 0;
