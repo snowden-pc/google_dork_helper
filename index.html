@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Dork Helper by 0xlipon</title>
+    <title>Google Dork Helper</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -86,7 +86,6 @@
 <body>
     <div class="container p-0">
         <h1 class="text-center">Google Dork Helper</h1>
-        <h6 align="center">Created by <a href="https://github.com/0xlipon" target="_blank">@0xlipon</a></h6>
         <form id="dorkForm" class="form-inline">
             <div class="form-group">
                 <input type="text" class="form-control" id="targetInput" placeholder="example.com" required>
@@ -134,17 +133,6 @@
             const target = document.querySelector('#targetInput').value;
             const dorkUrl = 'https://raw.githubusercontent.com/0xlipon/Dorks/main/google_dorks.txt';
 
-            const sitePatterns = [
-                `site:*.${target}`,
-                `site:*.*.*.${target}`,
-                `site:*<*.${target}.*`,
-                `site:*<-*.${target}.*`,
-                `site:*>*.${target}.*`,
-                `site:*->*.${target}.*`,
-                `site:*<->*.${target}.*`,
-                `site:*<*.${target}.com`
-            ];
-
             fetch(dorkUrl)
                 .then(response => {
                     if (!response.ok) {
@@ -160,20 +148,18 @@
                     lines.forEach(line => {
                         const trimmedLine = line.trim();
                         if (trimmedLine) {
-                            sitePatterns.forEach(pattern => {
-                                const query = `${pattern} ${encodeURIComponent(trimmedLine)}`;
-                                const dorkQueryUrl = `${baseUrl}${query}`;
-                                dorkQueries.push(dorkQueryUrl);
+                            const query = `site:*.${target} ${encodeURIComponent(trimmedLine)}`;
+                            const dorkQueryUrl = `${baseUrl}${query}`;
+                            dorkQueries.push(dorkQueryUrl);
 
-                                const listItem = document.createElement('p');
-                                const link = document.createElement('a');
-                                link.href = dorkQueryUrl;
-                                link.target = '_blank';
-                                link.innerText = dorkQueryUrl;
-                                link.style.color = '#00ff00'; // Set link color to green
-                                listItem.appendChild(link);
-                                dorkContainer.appendChild(listItem);
-                            });
+                            const listItem = document.createElement('p');
+                            const link = document.createElement('a');
+                            link.href = dorkQueryUrl;
+                            link.target = '_blank';
+                            link.innerText = dorkQueryUrl;
+                            link.style.color = '#00ff00'; // Set link color to green
+                            listItem.appendChild(link);
+                            dorkContainer.appendChild(listItem);
                         }
                     });
                     currentIndex = 0;
